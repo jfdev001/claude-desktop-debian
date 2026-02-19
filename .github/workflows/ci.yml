@@ -73,32 +73,32 @@ jobs:
   #     artifact_suffix: ${{ matrix.artifact_suffix }}
   #     release_tag: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
   #
-  # release:
-  #   name: Create Release
-  #   if: startsWith(github.ref, 'refs/tags/v')
-  #   needs: [test-flags, build-amd64, build-arm64]
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     contents: write
-  #
-  #   steps:
-  #     - name: Download AMD64 deb artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: package-amd64-deb
-  #         path: artifacts/
-  #
-  #     - name: Download AMD64 rpm artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: package-amd64-rpm
-  #         path: artifacts/
-  #
-  #     - name: Download AMD64 AppImage artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: package-amd64-appimage
-  #         path: artifacts/
+  release:
+    name: Create Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: [test-flags, build-amd64] #, build-arm64]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download AMD64 deb artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-amd64-deb
+          path: artifacts/
+
+      - name: Download AMD64 rpm artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-amd64-rpm
+          path: artifacts/
+
+      - name: Download AMD64 AppImage artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-amd64-appimage
+          path: artifacts/
   #
   #     - name: Download ARM64 deb artifact
   #       uses: actions/download-artifact@v4
@@ -118,10 +118,10 @@ jobs:
   #         name: package-arm64-appimage
   #         path: artifacts/
   #
-  #     - name: Create GitHub Release
-  #       uses: softprops/action-gh-release@v2
-  #       with:
-  #         files: artifacts/**/*
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/**/*
   #
   # update-apt-repo:
   #   name: Update APT Repository
